@@ -1,0 +1,127 @@
+---
+title: "RFA analysis"
+author: "Paola_Luis"
+date: "2023-01-01"
+output: html_document
+---
+
+```{r libraries, include= FALSE}
+library(metafor)
+library(openxlsx)
+library(dplyr)
+library(forestplot)
+knitr::opts_chunk$set(fig.path = "RFA Figures/", dev='svg') # dev = 'png'
+```
+
+
+``` {r clean, include= FALSE}
+data1 <- read.xlsx("Base Bocio.xlsx")
+databocio <- data1
+
+names(databocio)[1]<- "id"
+names(databocio)[2]<- "names"
+names(databocio)[3]<- "age"
+names(databocio)[4]<- "sex"
+
+datavol<- databocio[ ,1:9]
+names(datavol)[5]<- "volbasal"
+names(datavol)[6]<- "vol1m"
+names(datavol)[7]<- "vol3m"
+names(datavol)[8]<- "vol6m"
+names(datavol)[9]<- "vol12m"
+str(datavol)
+datavol$vol1m <- as.numeric(datavol$vol1m)
+datavol$vol3m <- as.numeric(datavol$vol3m)
+datavol$vol6m <- as.numeric(datavol$vol6m)
+datavol$sex <- as.factor(datavol$sex)
+str(datavol)
+
+
+datatsh<- databocio[ ,c(1:4, 11:22)]
+names(datatsh)[5]<- "tshbasal"
+names(datatsh)[6]<- "tsh1m"
+names(datatsh)[7]<- "tsh3m"
+names(datatsh)[8]<- "tsh6m"
+names(datatsh)[9]<- "tsh12m"
+names(datatsh)[12]<- "t4fbasal"
+names(datatsh)[13]<- "t4f1m"
+names(datatsh)[14]<- "t4f3m"
+names(datatsh)[15]<- "t4f6m"
+names(datatsh)[16]<- "t4f12m"
+datatsh<- datatsh[ , - c(10:11)]
+str(datatsh)
+datatsh$tshbasal<-as.numeric(datatsh$tshbasal)
+datatsh$tsh1m<-as.numeric(datatsh$tsh1m)
+datatsh$tsh3m<-as.numeric(datatsh$tsh3m)
+datatsh$t4fbasal<-as.numeric(datatsh$t4fbasal)
+datatsh$t4f1m<-as.numeric(datatsh$t4f1m)
+datatsh$t4f3m<-as.numeric(datatsh$t4f3m)
+datatsh$t4f6m<-as.numeric(datatsh$t4f6m)
+datatsh$t4f12m<-as.numeric(datatsh$t4f12m)
+datatsh$sex<- as.factor(datatsh$sex)
+str(datatsh)
+
+
+
+datacosmetic<- databocio[ ,c(1:4, 23:28)]
+names(datacosmetic)[5]<- "cosmbasal"
+names(datacosmetic)[6]<- "cosm1m"
+names(datacosmetic)[7]<- "cosm3m"
+names(datacosmetic)[8]<- "cosm6m"
+names(datacosmetic)[9]<- "cosm12m"
+datacosmetic<- datacosmetic[,-c(10)]
+datacosmetic$sex<- as.factor(datacosmetic$sex)
+str(datacosmetic)
+
+
+
+datasymt<-databocio[, c(1:4,29:33)]
+names(datasymt)[5]<- "symptbasal"
+names(datasymt)[6]<- "sympt1m"
+names(datasymt)[7]<- "sympt3m"
+names(datasymt)[8]<- "sympt6m"
+names(datasymt)[9]<- "sympt12m"
+str(datasymt)
+
+
+datareduc<-databocio[,c(1:4,35:38)]
+names(datareduc)[5]<- "red1m"
+names(datareduc)[6]<- "red3m"
+names(datareduc)[7]<- "red6m"
+names(datareduc)[8]<- "red12m"
+str(datareduc)
+datareduc$red6m<-as.numeric(datareduc$red6m)
+datareduc$red12m<-as.numeric(datareduc$red12m)
+str(datareduc)
+datareduc$sex<- as.factor(datareduc$sex)
+```
+
+
+```{r analysis,include=FALSE}
+shapiro.test(datavol$vol1m - datavol$volbasal)
+shapiro.test(datavol$vol3m - datavol$volbasal)
+shapiro.test(datavol$vol6m - datavol$volbasal)
+shapiro.test(datavol$vol12m - datavol$volbasal)
+
+t.test( datavol$vol1m,
+        datavol$volbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datavol$vol3m,
+        datavol$volbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datavol$vol6m,
+        datavol$volbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datavol$vol12m,
+        datavol$volbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+```
+
+
