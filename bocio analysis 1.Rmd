@@ -35,6 +35,9 @@ datavol$vol3m <- as.numeric(datavol$vol3m)
 datavol$vol6m <- as.numeric(datavol$vol6m)
 datavol$sex <- as.factor(datavol$sex)
 str(datavol)
+summary(datavol)
+sd(datavol$volbasal)
+sd(datavol$vol1m)
 
 
 datatsh<- databocio[ ,c(1:4, 11:22)]
@@ -60,6 +63,8 @@ datatsh$t4f6m<-as.numeric(datatsh$t4f6m)
 datatsh$t4f12m<-as.numeric(datatsh$t4f12m)
 datatsh$sex<- as.factor(datatsh$sex)
 str(datatsh)
+summary(datatsh)
+sd(datatsh$tshbasal)
 
 
 
@@ -72,6 +77,7 @@ names(datacosmetic)[9]<- "cosm12m"
 datacosmetic<- datacosmetic[,-c(10)]
 datacosmetic$sex<- as.factor(datacosmetic$sex)
 str(datacosmetic)
+summary(datacosmetic)
 
 
 
@@ -94,6 +100,31 @@ datareduc$red6m<-as.numeric(datareduc$red6m)
 datareduc$red12m<-as.numeric(datareduc$red12m)
 str(datareduc)
 datareduc$sex<- as.factor(datareduc$sex)
+summary(datareduc)
+
+
+datadiametro<-databocio[, c(1:4,39:43)]
+str(datadiametro)
+summary(datadiametro)
+datadiametro$diametro3m<-as.numeric(datadiametro$diametro3m)
+str(datadiametro)
+summary(datadiametro)
+sd(datadiametro$diametrobasal)
+sd(datadiametro$diametro1m)
+sd(datadiametro$diametro3m)
+sd(datadiametro$diametro6m)
+sd(datadiametro$diametro12m)
+
+
+
+sd(datadiametro$diametro1m)
+str(datadiametro)
+datadiametro$diametro1m<- as.numeric(datadiametro$diametro1m)
+datadiametro$diametro3m<- as.numeric(datadiametro$diametro3m)
+sd(datadiametro$diametro1m)
+mean(datadiametro$diametro1m)
+sd(datadiametro$diametro3m)
+sd(datadiametro$diametro6m)
 ```
 
 
@@ -120,6 +151,101 @@ t.test( datavol$vol6m,
 
 t.test( datavol$vol12m,
         datavol$volbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+
+t.test( datadiametro$diametro1m,
+        datadiametro$diametrobasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datadiametro$diametro3m,
+        datadiametro$diametrobasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datadiametro$diametro6m,
+        datadiametro$diametrobasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datadiametro$diametro12m,
+        datadiametro$diametrobasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+
+t.test( datareduc$red3m,
+        datareduc$red1m,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datareduc$red6m,
+        datareduc$red1m,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datareduc$red12m,
+        datareduc$red1m,
+        alternative = "two.sided",
+        paired = TRUE )
+
+
+t.test( datatsh$tsh1m,
+        datatsh$tshbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datatsh$tsh3m,
+        datatsh$tshbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datatsh$tsh6m,
+        datatsh$tshbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datatsh$tsh12m,
+        datatsh$tshbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+
+t.test( datacosmetic$cosm1m,
+        datacosmetic$cosmbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datacosmetic$cosm3m,
+        datacosmetic$cosmbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+t.test( datacosmetic$cosm6m,
+        datacosmetic$cosmbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+t.test( datacosmetic$cosm12m,
+        datacosmetic$cosmbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+
+t.test( datasymt$sympt1m,
+        datasymt$symptbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+t.test( datasymt$sympt3m,
+        datasymt$symptbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+t.test( datasymt$sympt6m,
+        datasymt$symptbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+t.test( datasymt$sympt12m,
+        datasymt$symptbasal,
         alternative = "two.sided",
         paired = TRUE )
 ```
