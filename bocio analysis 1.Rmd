@@ -9,9 +9,9 @@ output: html_document
 library(metafor)
 library(openxlsx)
 library(dplyr)
-library(forestplot)
-library(gplots)
+library(ggplot2)
 library(tidyr)
+library(reshape)
 knitr::opts_chunk$set(fig.path = "RFA Figures/", dev='svg') # dev = 'png'
 ```
 
@@ -256,15 +256,23 @@ t.test( datasymt$sympt12m,
 
 
 ```{r graphs, echo=FALSE, fig.height = 9.8, fig.width = 13.5}
-gvol <- datavol[,-c(2:4)]
+gvol <- datavol[,-c(2:4)] #Remove non-useful cols
+#Convertimos cols a rows y rows a cols
 gvol <- gvol%>%pivot_longer(-id, names_to = "mes", values_to = "valor")
 gvol <- gvol%>%pivot_wider(names_from = id, values_from = valor)
-#gvol1 <- as.factor(gvol$mes)
-palette(rich.colors(16))  # de 16 colores diferentes y suaves 
-
-interaction.plot(response=datavol$volbasal,
-                 x.factor=gvol$mes, col=1:16, lwd=2,
-                 trace.factor=datavol$id, las=1, lty=1, 
-                 xlab="Tiempo", ylab="Tumor volumen", legend=F)
+gvol <- gvol[,-1] #rows: 1 = volbasal, 2 = vol1m, 3 = vol3m, 4 = vol6m, 5 = vol12m
+#Formato para ggplot lineas
+gvol1 <- data.frame(x = seq_along(gvol[, c(1,2,3,4,5)]), gvol)
+gvol1 <- melt(gvol1, id.vars = "x")
+names(gvol1)[1] <- "Months"
+names(gvol1)[1] <- "value"
+gvol1 <- na.omit(gvol1)
+labels <- c("0", "1", "3", "6", "12")
+ggplot(gvol1, aes(x = Months, y = value, color = variable)) +
+  geom_line() + geom_point() +
+  theme(legend.position='none') + #Eliminamos legenda de cada id con su color
+  labs(title='Tumor volumen') +
+  scale_x_continuous(label = labels)
+  
 
 ```
