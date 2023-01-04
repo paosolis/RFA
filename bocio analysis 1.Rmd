@@ -10,6 +10,8 @@ library(metafor)
 library(openxlsx)
 library(dplyr)
 library(forestplot)
+library(gplots)
+library(tidyr)
 knitr::opts_chunk$set(fig.path = "RFA Figures/", dev='svg') # dev = 'png'
 ```
 
@@ -22,6 +24,8 @@ names(databocio)[1]<- "id"
 names(databocio)[2]<- "names"
 names(databocio)[3]<- "age"
 names(databocio)[4]<- "sex"
+databocio$id[5] = "400821963(1)" # dobles resultados porque son dobles ablasiones en diferentes sitios
+databocio$id[21] = "1303474009(1)"
 
 datavol<- databocio[ ,1:9]
 names(datavol)[5]<- "volbasal"
@@ -125,3 +129,16 @@ t.test( datavol$vol12m,
 ```
 
 
+```{r graphs, echo=FALSE, fig.height = 9.8, fig.width = 13.5}
+gvol <- datavol[,-c(2:4)]
+gvol <- gvol%>%pivot_longer(-id, names_to = "mes", values_to = "valor")
+gvol <- gvol%>%pivot_wider(names_from = id, values_from = valor)
+#gvol1 <- as.factor(gvol$mes)
+palette(rich.colors(16))  # de 16 colores diferentes y suaves 
+
+interaction.plot(response=datavol$volbasal,
+                 x.factor=gvol$mes, col=1:16, lwd=2,
+                 trace.factor=datavol$id, las=1, lty=1, 
+                 xlab="Tiempo", ylab="Tumor volumen", legend=F)
+
+```
