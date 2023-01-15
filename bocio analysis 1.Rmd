@@ -6,7 +6,7 @@ knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = e
 output: github_document
 ---
 
-<i> Analysis and visualization developed by [Luis A. Figueroa](https://twitter.com/LuisFig1706) [Paola SolíS Pazmiño](paosolpaz18@gmail.com)
+<i> Analysis and visualization developed by [Luis A. Figueroa](https://twitter.com/LuisFig1706) and [Paola SolíS Pazmiño](paosolpaz18@gmail.com)
 
 
 ```{r libraries, include= FALSE}
