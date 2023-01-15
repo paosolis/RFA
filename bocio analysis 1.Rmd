@@ -6,8 +6,7 @@ knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = e
 output: github_document
 ---
 
-<i> Analysis and visualization developed by [Luis A. Figueroa](https://twitter.com/LuisFig1706) and [Paola SolíS Pazmiño](paosolpaz18@gmail.com)
-
+<i> Analysis and visualization developed by [Luis A. Figueroa](https://twitter.com/LuisFig1706) and [Paola SolíS Pazmiño](paosolpaz18@gmail.com) </i>
 
 ```{r libraries, include= FALSE}
 library(metafor)
@@ -360,22 +359,46 @@ rownames(gvol3) <- NULL
 rownames(gvol6) <- NULL
 rownames(gvol12) <- NULL
 
-GRAPH <- ggplot(gvol1, aes(x=Months, y=value, groupo = variable)) + 
+GRAPH <- ggplot(gvol1, aes(x=Months, y=value, groupo = variable), ) + 
   geom_point(data = gvolb, aes(x=Months, y=value),color='#000000', size = 4.5) +
-  geom_line(data=gvol1, aes(x=Months, y=value), color = '#F37B59', size = 1.4) +
-  geom_point(data = gvol1, aes(x=Months, y=value),color='#F8766D', size = 4) +
-  geom_line(data=gvol3, aes(x=Months, y=value), color = '#AFA100', size = 1.3) +
-  geom_point(data = gvol3, aes(x=Months, y=value),color='#BB9D00', size = 4.3) +
-  geom_line(data=gvol6, aes(x=Months, y=value), color='#00BA42', size = 1.2) +
-  geom_point(data = gvol6, aes(x=Months, y=value),color='#00B81F', size = 4.1) +
+  geom_line(data=gvol1, aes(x=Months, y=value), color = '#8F3D38', size = 1.4) +
+  geom_point(data = gvol1, aes(x=Months, y=value),color='#56070C', size = 4) +
+  geom_line(data=gvol3, aes(x=Months, y=value), color = '#258D19', size = 1.3) +
+  geom_point(data = gvol3, aes(x=Months, y=value),color='#007B00', size = 4.3) +
+  geom_line(data=gvol6, aes(x=Months, y=value), color='#E44F9C', size = 1.2) +
+  geom_point(data = gvol6, aes(x=Months, y=value),color='#C93384', size = 4.1) +
   geom_line(data=gvol12, aes(x=Months, y=value), color='#00BFC4', size = 1) +
   geom_point(data = gvol12, aes(x=Months, y=value),color='#00C0B8', size = 3.9) +
-  theme(legend.position='none') + #Eliminamos legenda de cada id con su color
+  # theme(legend.position='none') + # Eliminamos legenda de cada id con su color
   labs(title='Tumor volumen') +
   scale_x_continuous(label = labels)
+
+#legend(x = "topright", legend = c("First month", "Third month", "Sixth month",
+ #                                 "Twelfth month"), fill = 
+Case_follow_up <- list('#000000', '#8F3D38', '#258D19', '#E44F9C', '#00BFC4')
+
+GRAPH <- ggplot(gvol1, aes(x=Months, y=value, groupo = variable)) + 
+  geom_point(data = gvolb, aes(x=Months, y=value, color=Case_follow_up[[1]]), size = 4.5) +
+  geom_line(data=gvol1, aes(x=Months, y=value, color=Case_follow_up[[5]]), size = 1.4) +
+  geom_point(data = gvol1, aes(x=Months, y=value, color=Case_follow_up[[5]]), size = 4) +
+  geom_line(data=gvol3, aes(x=Months, y=value, color=Case_follow_up[[3]]), size = 1.3) +
+  geom_point(data = gvol3, aes(x=Months, y=value, color=Case_follow_up[[3]]), size = 4.3) +
+  geom_line(data=gvol6, aes(x=Months, y=value, color=Case_follow_up[[2]]), size = 1.2) +
+  geom_point(data = gvol6, aes(x=Months, y=value, color=Case_follow_up[[2]]), size = 4.1) +
+  geom_line(data=gvol12, aes(x=Months, y=value,color=Case_follow_up[[4]]), size = 1) +
+  geom_point(data = gvol12, aes(x=Months, y=value, color=Case_follow_up[[4]]), size = 3.9) +
+  # theme(legend.position='none') + # Eliminamos legenda de cada id con su color
+  scale_x_continuous(label = labels) +
+  theme(legend.position = c(0.8, 0.8), legend.background = element_rect(fill = "white"), 
+        legend.key.size = unit(1.3, units = "cm")) +
+  guides(color = guide_legend(override.aes = list(size = 6)))+
+  scale_color_discrete("Case follow-up:    ", labels = c("Zero month", "First month",
+                                                         "Third month", "Sixth month",
+                                                    "Twelfth month")) +
+  labs(x = "Time (Months)" , y = "Nodule volume (mL)")
+
 GRAPH 
 ```
-
 
 </details>
 
