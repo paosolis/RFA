@@ -1,8 +1,9 @@
 ---
 title: "RFA analysis"
-author: "Paola_Luis"
+author: "Luis A. Figueroa, Paola SolíS Pazmiño & Oscar J. Ponce"
 date: "2023-01-01"
-output: html_document
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_file = paste0(dirname(inputFile),'/README.md')) })
+output: github_document
 ---
 
 <i> Analysis and visualization developed by [Luis A. Figueroa](https://twitter.com/LuisFig1706) [Paola SolíS Pazmiño](paosolpaz18@gmail.com)
@@ -15,6 +16,7 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 library(reshape)
+library(rmarkdown)
 knitr::opts_chunk$set(fig.path = "RFA Figures/", dev='svg') # dev = 'png'
 ```
 
