@@ -391,7 +391,7 @@ GRAPH <- ggplot(gvol1, aes(x=Months, y=value, groupo = variable)) +
                                                     "Twelfth month")) +
   labs(x = "Time (Months)" , y = "Nodule volume (mL)")
 
-GRAPH 
+GRAPH
 ```
 
 </details>
