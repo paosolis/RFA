@@ -270,7 +270,17 @@ t.test( datasymt$sympt12m,
 ```{r graphs, echo=FALSE, fig.height = 9.8, fig.width = 13.5, warning=F}
 gvol <- datavol[,-c(2:4)] #Remove non-useful cols
 
-#Subset of datos que se reportaron hasta el valor basa
+#Para interpretar el grafico usamos valores perdidos y disminucion del volumen del tumor
+#PRIMERO SI ES QUE AL 1, 3, 6 Y 12 MESES DISMINUYO
+one <- ifelse(gvol$vol12m<gvol$volbasal, yes = "GOOD", no = "N")
+three <- ifelse(gvol$vol6m<gvol$volbasal, yes = "GOOD", no = "N") 
+six <- ifelse(gvol$vol3m<gvol$volbasal, yes = "GOOD", no = "N") 
+twelve <- ifelse(gvol$vol1m<gvol$volbasal, yes = "GOOD", no = "N")
+
+#segundo cuantos casos no se reportaban EN CADA CITA CONTROL
+summary(gvol)
+
+  #Subset of datos que se reportaron hasta el valor basal
 gvolb <- subset(gvol, volbasal >= 0 & is.na(vol1m) & is.na(vol3m) & is.na(vol6m) & is.na(vol12m))
 
 #Subset of datos que se reportaron hasta el primer  mes
