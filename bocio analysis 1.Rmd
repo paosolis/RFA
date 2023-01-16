@@ -267,7 +267,7 @@ t.test( datasymt$sympt12m,
 <summary><b>Figure A -</b> Tumor size (volumen) after Radiofrequency Ablation </summary>
 <br>
 
-```{r graphs, echo=FALSE, fig.height = 9.8, fig.width = 13.5, warning=F}
+```{r graphs, echo=FALSE, fig.height = 9.8, fig.width = 13.5, warning=F, results=F}
 gvol <- datavol[,-c(2:4)] #Remove non-useful cols
 
 #Para interpretar el grafico usamos valores perdidos y disminucion del volumen del tumor
