@@ -20,7 +20,7 @@ knitr::opts_chunk$set(fig.path = "RFA Figures/", dev='svg') # dev = 'png'
 ```
 
 
-``` {r clean, echo=FALSE, include= FALSE}
+``` {r clean bocio, echo=FALSE, include= FALSE}
 data1 <- read.xlsx("Base Bocio.xlsx")
 databocio <- data1
 
@@ -135,8 +135,71 @@ sd(datadiametro$diametro3m)
 sd(datadiametro$diametro6m)
 ```
 
+``` {r clean micro, echo=FALSE, include= FALSE}
+data2 <- read.xlsx("Base micro.xlsx")
+datamicro <- data2[,-c(2:4)]
 
-```{r analysis,echo=FALSE, include=FALSE}
+datamicro$id[2] = "603402470(1)" # dobles resultados porque son dobles ablasiones en diferentes sitios
+datamicro$id[9] = "000000001" # dobles resultados porque son dobles ablasiones en diferentes sitios
+
+datavolm<- datamicro[ ,c(1,6:10)]
+str(datavolm)
+datavolm$volbasal <- as.numeric(datavolm$volbasal)
+datavolm$vol1m <- as.numeric(datavolm$vol1m)
+datavolm$vol3m <- as.numeric(datavolm$vol3m)
+datavolm$vol6m <- as.numeric(datavolm$vol6m)
+summary(datavolm)
+sd(datavolm$volbasal)
+sd(datavolm$vol1m)
+
+
+datatshm<- datamicro[ ,c(1, 11:14, 16:19)]
+names(datatshm)[6]<- "t4f1m"
+names(datatshm)[7]<- "t4f3m" 
+names(datatshm)[8]<- "t4f6m"
+names(datatshm)[9]<- "t4f12m"
+str(datatshm)
+datatshm$tsh1m<-as.numeric(datatshm$tsh1m)
+datatshm$tsh6m<-as.numeric(datatshm$tsh6m)
+datatshm$t4f1m<-as.numeric(datatshm$t4f1m)
+datatshm$t4f3m<-as.numeric(datatshm$t4f3m)
+summary(datatshm)
+
+
+datacosmeticm<- datamicro[ ,c(1, 23:27)]
+str(datacosmeticm)
+summary(datacosmeticm)
+
+
+datasymtm<-datamicro[, c(1, 29:33)]
+str(datasymtm)
+datasymtm$sympt1m<-as.numeric(datasymtm$sympt1m)
+
+
+datareducm<-datamicro[,c(1, 20:22)]
+str(datareducm)
+datareducm$red1m<-as.numeric(datareducm$red1m)
+datareducm$red3m<-as.numeric(datareducm$red3m)
+summary(datareducm)
+
+
+datadiametrom<-datamicro[, c(1:5)]
+names(datadiametrom)[2]<- "diametrobasal"
+names(datadiametrom)[3]<- "diametro1m"
+names(datadiametrom)[4]<- "diametro3m"
+names(datadiametrom)[5]<- "diametro6m"
+str(datadiametrom)
+datadiametrom$diametro1m<-as.numeric(datadiametrom$diametro1m)
+summary(datadiametrom)
+sd(datadiametrom$diametrobasal)
+sd(datadiametrom$diametro1m)
+sd(datadiametrom$diametro3m)
+sd(datadiametrom$diametro6m)
+sd(datadiametrom$diametro12m)
+```
+
+
+```{r analysis bocio,echo=FALSE, include=FALSE}
 shapiro.test(datavol$vol1m - datavol$volbasal)
 shapiro.test(datavol$vol3m - datavol$volbasal)
 shapiro.test(datavol$vol6m - datavol$volbasal)
@@ -258,13 +321,120 @@ t.test( datasymt$sympt12m,
         paired = TRUE )
 ```
 
+```{r analysis micro,echo=FALSE, include=FALSE}
+shapiro.test(datavolm$vol1m - datavolm$volbasal)
+shapiro.test(datavolm$vol3m - datavolm$volbasal)
+shapiro.test(datavolm$vol6m - datavolm$volbasal)
+# shapiro.test(datavolm$vol12m - datavolm$volbasal) #No hay datos en datavolm$vol12m
+
+t.test( datavolm$vol1m,
+        datavolm$volbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datavolm$vol3m,
+        datavolm$volbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datavolm$vol6m,
+        datavolm$volbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+#t.test( datavolm$vol12m,
+ #       datavolm$volbasal,
+  #      alternative = "two.sided",
+   #     paired = TRUE )  #No hay datos en datavolm$vol12m
+
+
+t.test( datadiametrom$diametro1m,
+        datadiametrom$diametrobasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datadiametrom$diametro3m,
+        datadiametrom$diametrobasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datadiametrom$diametro6m,
+        datadiametrom$diametrobasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+# t.test( datareducm$red3m,
+  #      datareducm$red1m,
+   #     alternative = "two.sided",
+    #    paired = TRUE ) #No hay datos suficientes dice el error
+
+#t.test( datareducm$red6m,
+ #       datareducm$red1m,
+  #      alternative = "two.sided",
+   #     paired = TRUE ) #No hay datos suficientes dice el error
+
+t.test( datatshm$tsh3m,
+        datatshm$tsh1m,
+        alternative = "two.sided",
+        paired = TRUE )
+
+# t.test( datatshm$tsh6m,
+  #      datatshm$tsh1m,
+   #     alternative = "two.sided",
+    #    paired = TRUE ) # Error: data are essentially constant
+
+#t.test( datatshm$tsh12m,
+ #       datatshm$tsh1m,
+  #      alternative = "two.sided",
+   #     paired = TRUE ) #no hay datos en tshm12m
+
+
+t.test( datacosmeticm$cosm1m,
+        datacosmeticm$combasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datacosmeticm$cosm3m,
+        datacosmeticm$combasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datacosmeticm$cosm6m,
+        datacosmeticm$combasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datacosmeticm$cosm12m,
+        datacosmeticm$combasal,
+        alternative = "two.sided",
+        paired = TRUE )
+
+
+t.test( datasymtm$sympt1m,
+        datasymtm$symptbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+t.test( datasymtm$sympt3m,
+        datasymtm$symptbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+t.test( datasymtm$sympt6m,
+        datasymtm$symptbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+t.test( datasymtm$sympt12m,
+        datasymtm$symptbasal,
+        alternative = "two.sided",
+        paired = TRUE )
+```
+
 <br>
 <h2>Radiofrequency Ablation for Thyroid Nodules in Ecuador: Cross-sectional study</h2>
 
 
 <details>
 
-<summary><b>Figure A -</b> Tumor size (volumen) after Radiofrequency Ablation </summary>
+<summary><b>Figure A -</b> Benign tumor volumen (mL) after Radiofrequency Ablation </summary>
 <br>
 
 ```{r graphs, echo=FALSE, fig.height = 9.8, fig.width = 13.5, warning=F, results=F}
