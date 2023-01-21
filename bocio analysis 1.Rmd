@@ -567,12 +567,13 @@ GRAPH
 </details>
 
 
+
 <details>
 
-<summary><b>Figure A -</b> Microadenoma volumen (mL) after Radiofrequency Ablation </summary>
+<summary><b>Figure B -</b> Microadenoma volumen (mL) after Radiofrequency Ablation </summary>
 <br>
 
-```{r graphs, echo=FALSE, fig.height = 9.8, fig.width = 13.5, warning=F, results=F}
+```{r graphsm, echo=FALSE, fig.height = 9.8, fig.width = 13.5, warning=F, results=F}
 gvolm <- datavolm
 
 #Para interpretar el grafico usamos valores perdidos y disminucion del volumen del tumor
@@ -700,3 +701,4 @@ GRAPHM
 ```
 
 </details>
+

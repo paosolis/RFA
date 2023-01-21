@@ -14,11 +14,23 @@ study
 </h2>
 <details>
 <summary>
-<b>Figure A -</b> Tumor size (volumen) after Radiofrequency Ablation
+<b>Figure A -</b> Benign tumor volumen (mL) after Radiofrequency
+Ablation
 </summary>
 
 <br>
 
 ![](RFA%20Figures/graphs-1.svg)<!-- -->
+
+</details>
+<details>
+<summary>
+<b>Figure A -</b> Microadenoma volumen (mL) after Radiofrequency
+Ablation
+</summary>
+
+<br>
+
+![](RFA%20Figures/graphsm-1.svg)<!-- -->
 
 </details>
