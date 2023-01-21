@@ -567,3 +567,136 @@ GRAPH
 </details>
 
 
+<details>
+
+<summary><b>Figure A -</b> Microadenoma volumen (mL) after Radiofrequency Ablation </summary>
+<br>
+
+```{r graphs, echo=FALSE, fig.height = 9.8, fig.width = 13.5, warning=F, results=F}
+gvolm <- datavolm
+
+#Para interpretar el grafico usamos valores perdidos y disminucion del volumen del tumor
+#PRIMERO SI ES QUE AL 1, 3, 6 Y 12 MESES DISMINUYO
+onem <- ifelse(gvolm$vol12m<gvolm$volbasal, yes = "GOOD", no = "N")
+threem <- ifelse(gvolm$vol6m<gvolm$volbasal, yes = "GOOD", no = "N") 
+sixm <- ifelse(gvolm$vol3m<gvolm$volbasal, yes = "GOOD", no = "N") 
+twelvem <- ifelse(gvolm$vol1m<gvolm$volbasal, yes = "GOOD", no = "N")
+
+#segundo cuantos casos no se reportaban EN CADA CITA CONTROL
+summary(gvolm)
+
+#Subset of datos que se reportaron hasta el valor basal
+gvolbm <- subset(gvolm, volbasal >= 0 & is.na(vol1m) & is.na(vol3m) & is.na(vol6m) & is.na(vol12m))
+
+#Subset of datos que se reportaron hasta el primer  mes
+gvol1m <- subset(gvolm, volbasal >= 0 & vol1m >= 0 & is.na(vol3m) & is.na(vol6m) & is.na(vol12m))
+
+#Subset of datos que se reportaron hasta el tercer  mes
+gvol3m <- subset(gvolm, volbasal >= 0 & vol1m >= 0  & vol3m >= 0 & is.na(vol6m) & is.na(vol12m))
+
+#Subset of datos que se reportaron hasta el sexto  mes
+gvol6m <- subset(gvolm, volbasal >= 0 & vol1m >= 0 & vol3m >= 0  & vol6m >= 0 & is.na(vol12m)) #
+gvol6am <- subset(gvolm, volbasal >= 0 & is.na(vol1m) & is.na(vol3m) & vol6m >= 0 & is.na(vol12m))
+gvol6m <- merge(gvol6m, gvol6am, by = c("id", "volbasal", "vol1m", "vol3m", "vol6m", "vol12m"), all = T)
+gvol6bm <- subset(gvolm, volbasal >= 0 & vol1m >= 0 & is.na(vol3m) & vol6m >= 0 & is.na(vol12m))
+gvol6m <- merge(gvol6m, gvol6bm, by = c("id", "volbasal", "vol1m", "vol3m", "vol6m", "vol12m"), all = T)
+
+#Subset of datos que se reportaron hasta el 12vo mes
+gvol12m <- subset(gvolm, volbasal >= 0 & vol1m >= 0 & vol3m >= 0  & vol6m >= 0 & vol12m >= 0)
+gvol12bm <- subset(gvolm, volbasal >= 0 & is.na(vol1m) & is.na(vol3m) & is.na(vol6m) & vol12m >= 0)
+gvol12m <- merge(gvol12m, gvol12bm, by = c("id", "volbasal", "vol1m", "vol3m", "vol6m", "vol12m"), all = T)
+gvol12cm <- subset(gvolm, volbasal >= 0 & vol1m >= 0 & is.na(vol3m) & vol6m >= 0 & vol12m >= 0)
+gvol12m <- merge(gvol12m, gvol12cm, by = c("id", "volbasal", "vol1m", "vol3m", "vol6m", "vol12m"), all = T)
+gvol12dm <- subset(gvolm, volbasal >= 0 & is.na(vol1m) & is.na(vol3m) & vol6m >= 0 & vol12m >= 0)
+gvol12m <- merge(gvol12m, gvol12dm, by = c("id", "volbasal", "vol1m", "vol3m", "vol6m", "vol12m"), all = T)
+
+#Convertimos cols a rows y rows a cols 
+gvolbm <- gvolbm%>%pivot_longer(-id, names_to = "mes", values_to = "valor")
+gvolbm <- gvolbm%>%pivot_wider(names_from = id, values_from = valor)
+gvolbm <- gvolbm[,-1] #rows: 1 = volbasal, 2 = vol1m, 3 = vol3m, 4 = vol6m, 5 = vol12m
+new_col1bm = list(NA)
+new_col2bm = list(NA)
+new_col3bm = list(NA)
+gvolbm <- cbind(gvolbm, new_col1bm, new_col2bm, new_col3bm)
+
+gvol1m <- gvol1m%>%pivot_longer(-id, names_to = "mes", values_to = "valor")
+gvol1m <- gvol1m%>%pivot_wider(names_from = id, values_from = valor)
+gvol1m <- gvol1m[,-1] #rows: 1 = volbasal, 2 = vol1m, 3 = vol3m, 4 = vol6m, 5 = vol12m
+gvol1m <- cbind(gvol1m, new_col1bm, new_col2bm)
+
+gvol3m <- gvol3m%>%pivot_longer(-id, names_to = "mes", values_to = "valor")
+gvol3m <- gvol3m%>%pivot_wider(names_from = id, values_from = valor)
+gvol3m <- gvol3m[,-1] #rows: 1 = volbasal, 2 = vol1m, 3 = vol3m, 4 = vol6m, 5 = vol12m
+gvol3m <- cbind(gvol3m, new_col1bm, new_col2bm, new_col3bm)
+
+gvol6m <- gvol6m%>%pivot_longer(-id, names_to = "mes", values_to = "valor")
+gvol6m <- gvol6m%>%pivot_wider(names_from = id, values_from = valor)
+gvol6m <- gvol6m[,-1] #rows: 1 = volbasal, 2 = vol1m, 3 = vol3m, 4 = vol6m, 5 = vol12m
+gvol6m <- cbind(gvol6m, new_col1bm, new_col2bm)
+
+gvol12m <- gvol12m%>%pivot_longer(-id, names_to = "mes", values_to = "valor")
+gvol12m <- gvol12m%>%pivot_wider(names_from = id, values_from = valor)
+gvol12m <- gvol12m[,-1] #rows: 1 = volbasal, 2 = vol1m, 3 = vol3m, 4 = vol6m, 5 = vol12m
+
+#Formato para ggplot lineas
+gvolbm <- data.frame(x = seq_along(gvolbm[, c(1,2,3,4,5)]), gvolbm)
+gvolbm <- melt(gvolbm, id.vars = "x")
+names(gvolbm)[1] <- "Months"
+names(gvolbm)[3] <- "value"
+gvolb <- na.omit(gvolbm)
+
+gvol1m <- data.frame(x = seq_along(gvol1m[, c(1,2,3,4,5)]), gvol1m)
+gvol1m <- melt(gvol1m, id.vars = "x")
+names(gvol1m)[1] <- "Months"
+names(gvol1m)[3] <- "value"
+gvol1 <- na.omit(gvol1m)
+
+colnames(gvol3m) <- c(1,2,3,4,5)
+gvol3m <- data.frame(x = seq_along(gvol3m[, c(1,2,3,4,5)]), gvol3m)
+gvol3m <- melt(gvol3m, id.vars = "x")
+names(gvol3m)[1] <- "Months"
+names(gvol3m)[3] <- "value"
+gvol3m <- na.omit(gvol3m)
+
+gvol6m <- data.frame(x = seq_along(gvol6m[, c(1,2,3,4,5)]), gvol6m)
+gvol6m <- melt(gvol6m, id.vars = "x")
+names(gvol6m)[1] <- "Months"
+names(gvol6m)[3] <- "value"
+gvol6m <- na.omit(gvol6m)
+
+names(gvol12m)[1] <- "Months"
+names(gvol12m)[3] <- "value"
+gvol12m <- na.omit(gvol12m)
+
+
+#Grafico 
+labels <- c("0", "1", "3", "6", "12")
+rownames(gvolbm) <- NULL
+rownames(gvol1m) <- NULL
+rownames(gvol3m) <- NULL
+rownames(gvol6m) <- NULL
+rownames(gvol12m) <- NULL
+
+Case_follow_up <- list('#000000', '#8F3D38', '#258D19', '#E44F9C', '#00BFC4')
+
+GRAPHM <- ggplot(gvol1m, aes(x=Months, y=value, groupo = variable)) + 
+  geom_point(data = gvolbm, aes(x=Months, y=value, color=Case_follow_up[[1]]), size = 4.5) +
+  geom_line(data=gvol1m, aes(x=Months, y=value, color=Case_follow_up[[5]]), size = 1.4) +
+  geom_point(data = gvol1m, aes(x=Months, y=value, color=Case_follow_up[[5]]), size = 4) +
+  geom_line(data=gvol3m, aes(x=Months, y=value, color=Case_follow_up[[3]]), size = 1.3) +
+  geom_point(data = gvol3m, aes(x=Months, y=value, color=Case_follow_up[[3]]), size = 4.3) +
+  geom_line(data=gvol6m, aes(x=Months, y=value, color=Case_follow_up[[2]]), size = 1.2) +
+  geom_point(data = gvol6m, aes(x=Months, y=value, color=Case_follow_up[[2]]), size = 4.1) +
+  # theme(legend.position='none') + # Eliminamos legenda de cada id con su color
+  scale_x_continuous(label = labels) +
+  theme(legend.position = c(0.8, 0.8), legend.background = element_rect(fill = "white"), 
+        legend.key.size = unit(1.3, units = "cm")) +
+  guides(color = guide_legend(override.aes = list(size = 6)))+
+  scale_color_discrete("Case follow-up:    ", labels = c("Zero month", "First month",
+                                                         "Third month", "Sixth month")) +
+  labs(x = "Time (Months)" , y = "Nodule volume (mL)")
+
+GRAPHM
+```
+
+</details>
