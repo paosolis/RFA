@@ -25,7 +25,7 @@ Ablation
 </details>
 <details>
 <summary>
-<b>Figure A -</b> Microadenoma volumen (mL) after Radiofrequency
+<b>Figure B -</b> Microadenoma volumen (mL) after Radiofrequency
 Ablation
 </summary>
 
