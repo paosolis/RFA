@@ -128,31 +128,24 @@ datavolm$vol3m <- as.numeric(datavolm$vol3m)
 datavolm$vol6m <- as.numeric(datavolm$vol6m)
 summary(datavolm)
 
-datatshm<- datamicro[ ,c(1, 11:14, 16:19)]
-names(datatshm)[6]<- "t4f1m"
-names(datatshm)[7]<- "t4f3m" 
-names(datatshm)[8]<- "t4f6m"
-names(datatshm)[9]<- "t4f12m"
+datatshm<- datamicro[ ,c(1, 11:15)]
 str(datatshm)
-datatshm$tsh1m<-as.numeric(datatshm$tsh1m)
 datatshm$tsh6m<-as.numeric(datatshm$tsh6m)
-datatshm$t4f1m<-as.numeric(datatshm$t4f1m)
-datatshm$t4f3m<-as.numeric(datatshm$t4f3m)
 summary(datatshm)
 
 
-datacosmeticm<- datamicro[ ,c(1, 23:27)]
+datacosmeticm<- datamicro[ ,c(1, 24:28)]
 str(datacosmeticm)
 summary(datacosmeticm)
 
 
-datasymtm<-datamicro[, c(1, 29:33)]
+datasymtm<-datamicro[, c(1, 30:34)]
 str(datasymtm)
 datasymtm$sympt1m<-as.numeric(datasymtm$sympt1m)
 summary(datasymtm)
 
 
-datareducm<-datamicro[,c(1, 20:22)]
+datareducm<-datamicro[,c(1, 21:23)]
 str(datareducm)
 datareducm$red1m<-as.numeric(datareducm$red1m)
 datareducm$red3m<-as.numeric(datareducm$red3m)
@@ -345,20 +338,25 @@ t.test( datadiametrom$diametro6m,
   #      alternative = "two.sided",
    #     paired = TRUE ) #No hay datos suficientes dice el error
 
-# t.test( datatshm$tsh3m,
-  #      datatshm$tsh1m,
+t.test( datatshm$tsh1m,
+        datatshm$tshpre,
+        alternative = "two.sided",
+        paired = TRUE )
+
+t.test( datatshm$tsh3m,
+        datatshm$tshpre,
+        alternative = "two.sided",
+        paired = TRUE )
+
+# t.test( datatshm$tsh6m,
+  #      datatshm$tshpre,
    #     alternative = "two.sided",
     #    paired = TRUE )
 
-# t.test( datatshm$tsh6m,
-  #      datatshm$tsh1m,
-   #     alternative = "two.sided",
-    #    paired = TRUE ) # Error: data are essentially constant
-
 #t.test( datatshm$tsh12m,
- #       datatshm$tsh1m,
-  #      alternative = "two.sided",
-   #     paired = TRUE ) #no hay datos en tshm12m
+  #      datatshm$tshpre,
+ #       alternative = "two.sided",
+#        paired = TRUE ) #No hay datos suficientes dice el error
 
 
 t.test( datacosmeticm$cosm1m,
@@ -663,8 +661,7 @@ GRAPHM <- ggplot(gvol1m, aes(x=Months, y=value, groupo = variable)) +
   theme(legend.position = c(0.8, 0.8), legend.background = element_rect(fill = "white"), 
         legend.key.size = unit(1.3, units = "cm")) +
   guides(color = guide_legend(override.aes = list(size = 6)))+
-  scale_color_discrete("Case follow-up:    ", labels = c("Zero month", "First month",
-                                                         "Third month", "Sixth month")) +
+  scale_color_discrete("Case follow-up:    ", labels = c("First month", "Third month", "Sixth month")) +
   labs(x = "Time (Months)" , y = "Nodule volume (mL)")
 
 GRAPHM
