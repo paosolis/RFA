@@ -44,8 +44,6 @@ datavol$vol6m <- as.numeric(datavol$vol6m)
 datavol$sex <- as.factor(datavol$sex)
 str(datavol)
 summary(datavol)
-sd(datavol$volbasal)
-sd(datavol$vol1m)
 
 
 datatsh<- databocio[ ,c(1:4, 11:22)]
@@ -72,8 +70,6 @@ datatsh$t4f12m<-as.numeric(datatsh$t4f12m)
 datatsh$sex<- as.factor(datatsh$sex)
 str(datatsh)
 summary(datatsh)
-sd(datatsh$tshbasal)
-
 
 
 datacosmetic<- databocio[ ,c(1:4, 23:28)]
@@ -112,27 +108,10 @@ summary(datareduc)
 
 
 datadiametro<-databocio[, c(1:4,39:43)]
-str(datadiametro)
-summary(datadiametro)
 datadiametro$diametro3m<-as.numeric(datadiametro$diametro3m)
-str(datadiametro)
-summary(datadiametro)
-sd(datadiametro$diametrobasal)
-sd(datadiametro$diametro1m)
-sd(datadiametro$diametro3m)
-sd(datadiametro$diametro6m)
-sd(datadiametro$diametro12m)
-
-
-
-sd(datadiametro$diametro1m)
-str(datadiametro)
 datadiametro$diametro1m<- as.numeric(datadiametro$diametro1m)
 datadiametro$diametro3m<- as.numeric(datadiametro$diametro3m)
-sd(datadiametro$diametro1m)
-mean(datadiametro$diametro1m)
-sd(datadiametro$diametro3m)
-sd(datadiametro$diametro6m)
+summary(datadiametro)
 ```
 
 ``` {r clean micro, echo=FALSE, include= FALSE}
@@ -140,7 +119,6 @@ data2 <- read.xlsx("Base micro.xlsx")
 datamicro <- data2[,-c(2:4)]
 
 datamicro$id[2] = "603402470(1)" # dobles resultados porque son dobles ablasiones en diferentes sitios
-datamicro$id[9] = "000000001" # dobles resultados porque son dobles ablasiones en diferentes sitios
 
 datavolm<- datamicro[ ,c(1,6:10)]
 str(datavolm)
@@ -149,9 +127,6 @@ datavolm$vol1m <- as.numeric(datavolm$vol1m)
 datavolm$vol3m <- as.numeric(datavolm$vol3m)
 datavolm$vol6m <- as.numeric(datavolm$vol6m)
 summary(datavolm)
-sd(datavolm$volbasal)
-sd(datavolm$vol1m)
-
 
 datatshm<- datamicro[ ,c(1, 11:14, 16:19)]
 names(datatshm)[6]<- "t4f1m"
@@ -174,6 +149,7 @@ summary(datacosmeticm)
 datasymtm<-datamicro[, c(1, 29:33)]
 str(datasymtm)
 datasymtm$sympt1m<-as.numeric(datasymtm$sympt1m)
+summary(datasymtm)
 
 
 datareducm<-datamicro[,c(1, 20:22)]
@@ -191,11 +167,7 @@ names(datadiametrom)[5]<- "diametro6m"
 str(datadiametrom)
 datadiametrom$diametro1m<-as.numeric(datadiametrom$diametro1m)
 summary(datadiametrom)
-sd(datadiametrom$diametrobasal)
-sd(datadiametrom$diametro1m)
-sd(datadiametrom$diametro3m)
-sd(datadiametrom$diametro6m)
-sd(datadiametrom$diametro12m)
+
 ```
 
 
@@ -373,10 +345,10 @@ t.test( datadiametrom$diametro6m,
   #      alternative = "two.sided",
    #     paired = TRUE ) #No hay datos suficientes dice el error
 
-t.test( datatshm$tsh3m,
-        datatshm$tsh1m,
-        alternative = "two.sided",
-        paired = TRUE )
+# t.test( datatshm$tsh3m,
+  #      datatshm$tsh1m,
+   #     alternative = "two.sided",
+    #    paired = TRUE )
 
 # t.test( datatshm$tsh6m,
   #      datatshm$tsh1m,
@@ -594,6 +566,8 @@ gvol1m <- subset(gvolm, volbasal >= 0 & vol1m >= 0 & is.na(vol3m) & is.na(vol6m)
 
 #Subset of datos que se reportaron hasta el tercer  mes
 gvol3m <- subset(gvolm, volbasal >= 0 & vol1m >= 0  & vol3m >= 0 & is.na(vol6m) & is.na(vol12m))
+gvol3am <- subset(gvolm, volbasal >= 0 & is.na(vol1m) & vol3m >=0 & is.na(vol6m) & is.na(vol12m))
+gvol3m <- merge(gvol3m, gvol3am, by = c("id", "volbasal", "vol1m", "vol3m", "vol6m", "vol12m"), all = T)
 
 #Subset of datos que se reportaron hasta el sexto  mes
 gvol6m <- subset(gvolm, volbasal >= 0 & vol1m >= 0 & vol3m >= 0  & vol6m >= 0 & is.na(vol12m)) #
@@ -615,20 +589,19 @@ gvol12m <- merge(gvol12m, gvol12dm, by = c("id", "volbasal", "vol1m", "vol3m", "
 gvolbm <- gvolbm%>%pivot_longer(-id, names_to = "mes", values_to = "valor")
 gvolbm <- gvolbm%>%pivot_wider(names_from = id, values_from = valor)
 gvolbm <- gvolbm[,-1] #rows: 1 = volbasal, 2 = vol1m, 3 = vol3m, 4 = vol6m, 5 = vol12m
-new_col1bm = list(NA)
-new_col2bm = list(NA)
-new_col3bm = list(NA)
-gvolbm <- cbind(gvolbm, new_col1bm, new_col2bm, new_col3bm)
 
 gvol1m <- gvol1m%>%pivot_longer(-id, names_to = "mes", values_to = "valor")
 gvol1m <- gvol1m%>%pivot_wider(names_from = id, values_from = valor)
 gvol1m <- gvol1m[,-1] #rows: 1 = volbasal, 2 = vol1m, 3 = vol3m, 4 = vol6m, 5 = vol12m
-gvol1m <- cbind(gvol1m, new_col1bm, new_col2bm)
+new_col1bm <- list(NA)
+new_col2bm <- list(NA)
+new_col3bm <- list(NA)
+gvol1m <- cbind(gvol1m, new_col1bm, new_col2bm, new_col3bm)
 
 gvol3m <- gvol3m%>%pivot_longer(-id, names_to = "mes", values_to = "valor")
 gvol3m <- gvol3m%>%pivot_wider(names_from = id, values_from = valor)
 gvol3m <- gvol3m[,-1] #rows: 1 = volbasal, 2 = vol1m, 3 = vol3m, 4 = vol6m, 5 = vol12m
-gvol3m <- cbind(gvol3m, new_col1bm, new_col2bm, new_col3bm)
+gvol3m <- cbind(gvol3m, new_col1bm, new_col2bm, new_col3bm, new_col1bm)
 
 gvol6m <- gvol6m%>%pivot_longer(-id, names_to = "mes", values_to = "valor")
 gvol6m <- gvol6m%>%pivot_wider(names_from = id, values_from = valor)
@@ -640,10 +613,8 @@ gvol12m <- gvol12m%>%pivot_wider(names_from = id, values_from = valor)
 gvol12m <- gvol12m[,-1] #rows: 1 = volbasal, 2 = vol1m, 3 = vol3m, 4 = vol6m, 5 = vol12m
 
 #Formato para ggplot lineas
-gvolbm <- data.frame(x = seq_along(gvolbm[, c(1,2,3,4,5)]), gvolbm)
-gvolbm <- melt(gvolbm, id.vars = "x")
 names(gvolbm)[1] <- "Months"
-names(gvolbm)[3] <- "value"
+names(gvolbm)[2] <- "value"
 gvolb <- na.omit(gvolbm)
 
 gvol1m <- data.frame(x = seq_along(gvol1m[, c(1,2,3,4,5)]), gvol1m)
@@ -680,8 +651,7 @@ rownames(gvol12m) <- NULL
 
 Case_follow_up <- list('#000000', '#8F3D38', '#258D19', '#E44F9C', '#00BFC4')
 
-GRAPHM <- ggplot(gvol1m, aes(x=Months, y=value, groupo = variable)) + 
-  geom_point(data = gvolbm, aes(x=Months, y=value, color=Case_follow_up[[1]]), size = 4.5) +
+GRAPHM <- ggplot(gvol1m, aes(x=Months, y=value, groupo = variable)) +
   geom_line(data=gvol1m, aes(x=Months, y=value, color=Case_follow_up[[5]]), size = 1.4) +
   geom_point(data = gvol1m, aes(x=Months, y=value, color=Case_follow_up[[5]]), size = 4) +
   geom_line(data=gvol3m, aes(x=Months, y=value, color=Case_follow_up[[3]]), size = 1.3) +
